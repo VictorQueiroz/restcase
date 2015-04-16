@@ -1,0 +1,19 @@
+{
+  "name": "restcase",
+  "version": "0.0.1",
+  "homepage": "https://github.com/VictorQueiroz/tdu",
+  "authors": [
+    "Victor Queiroz <victorcqueirozg@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lodash": "~3.7.0"
+  }
+}
