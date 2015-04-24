@@ -56,4 +56,29 @@ describe('Model', function () {
 		expect(event._pending).toBe(false);
 		expect(throwed).toBe(true);
 	});
+
+	it('should deep extend a model', function () {
+		var Model = Restcase.Model.extend({
+			methods: {
+				method1: {
+					headers: {
+						'X-CSRF-Token': 'something_here'
+					}
+				}
+			}
+		});
+
+		var MyNewModel = Model.extend({
+			methods: {
+				method1: {
+					headers: {
+						'Other-Header': 'here_is_my_value'
+					}
+				}
+			}
+		});
+
+		expect(MyNewModel.prototype.methods.method1.headers['Other-Header']).toBe('here_is_my_value');
+		expect(MyNewModel.prototype.methods.method1.headers['X-CSRF-Token']).toBe('something_here');
+	});
 });

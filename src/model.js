@@ -253,5 +253,4 @@ var modelMethods = { keys: 1, values: 1, pairs: 1, invert: 1, pick: 0,
 // Mix in each Underscore method as a proxy to `Model#attributes`.
 addUnderscoreMethods(Model, modelMethods, 'attributes');
 
-// Set up inheritance for the model, collection, router, view and history.
-Model.extend = Collection.extend = extend;
+Model.extend = extend;

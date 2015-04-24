@@ -413,41 +413,7 @@ _.each(attributeMethods, function(method) {
   };
 });
 
-// Helper function to correctly set up the prototype chain, for subclasses.
-// Similar to `goog.inherits`, but uses a hash of prototype properties and
-// class properties to be extended.
-var extend = function(protoProps, staticProps) {
-  var parent = this;
-  var child;
-
-  // The constructor function for the new subclass is either defined by you
-  // (the "constructor" property in your `extend` definition), or defaulted
-  // by us to simply call the parent's constructor.
-  if (protoProps && _.has(protoProps, 'constructor')) {
-    child = protoProps.constructor;
-  } else {
-    child = function(){ return parent.apply(this, arguments); };
-  }
-
-  // Add static properties to the constructor function, if supplied.
-  _.extend(child, parent, staticProps);
-
-  // Set the prototype chain to inherit from `parent`, without calling
-  // `parent`'s constructor function.
-  var Surrogate = function(){ this.constructor = child; };
-  Surrogate.prototype = parent.prototype;
-  child.prototype = new Surrogate;
-
-  // Add prototype properties (instance properties) to the subclass,
-  // if supplied.
-  if (protoProps) _.extend(child.prototype, protoProps);
-
-  // Set a convenience property in case the parent's prototype is needed
-  // later.
-  child.__super__ = parent.prototype;
-
-  return child;
-};
+Collection.extend = extend;
 var Events = {
   // Bind an event to a `callback` function. Passing `"all"` will bind
   // the callback to all events fired.
@@ -621,6 +587,42 @@ function addUnderscoreMethods (Class, methods, attribute) {
   _.each(methods, function(length, method) {
     if (_[method]) Class.prototype[method] = addMethod(length, method, attribute);
   });
+};
+
+// Helper function to correctly set up the prototype chain, for subclasses.
+// Similar to `goog.inherits`, but uses a hash of prototype properties and
+// class properties to be extended.
+function extend (protoProps, staticProps) {
+  var parent = this;
+  var child;
+
+  // The constructor function for the new subclass is either defined by you
+  // (the "constructor" property in your `merge` definition), or defaulted
+  // by us to simply call the parent's constructor.
+  if (protoProps && _.has(protoProps, 'constructor')) {
+    child = protoProps.constructor;
+  } else {
+    child = function(){ return parent.apply(this, arguments); };
+  }
+
+  // Add static properties to the constructor function, if supplied.
+  _.merge(child, parent, staticProps);
+
+  // Set the prototype chain to inherit from `parent`, without calling
+  // `parent`'s constructor function.
+  var Surrogate = function(){ this.constructor = child; };
+  Surrogate.prototype = parent.prototype;
+  child.prototype = new Surrogate;
+
+  // Add prototype properties (instance properties) to the subclass,
+  // if supplied.
+  if (protoProps) _.merge(child.prototype, protoProps);
+
+  // Set a convenience property in case the parent's prototype is needed
+  // later.
+  child.__super__ = parent.prototype;
+
+  return child;
 };
 var Model = function (attributes, options) {
   var attrs = attributes || {};
@@ -877,8 +879,7 @@ var modelMethods = { keys: 1, values: 1, pairs: 1, invert: 1, pick: 0,
 // Mix in each Underscore method as a proxy to `Model#attributes`.
 addUnderscoreMethods(Model, modelMethods, 'attributes');
 
-// Set up inheritance for the model, collection, router, view and history.
-Model.extend = Collection.extend = extend;
+Model.extend = extend;
 var Restcase = {
 	Collection: Collection,
 	Model: Model,
