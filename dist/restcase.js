@@ -606,7 +606,7 @@ function extend (protoProps, staticProps) {
   }
 
   // Add static properties to the constructor function, if supplied.
-  _.merge(child, parent, staticProps);
+  _.extend(child, parent, staticProps);
 
   // Set the prototype chain to inherit from `parent`, without calling
   // `parent`'s constructor function.
@@ -616,7 +616,7 @@ function extend (protoProps, staticProps) {
 
   // Add prototype properties (instance properties) to the subclass,
   // if supplied.
-  if (protoProps) _.merge(child.prototype, protoProps);
+  if (protoProps) _.extend(child.prototype, protoProps);
 
   // Set a convenience property in case the parent's prototype is needed
   // later.
